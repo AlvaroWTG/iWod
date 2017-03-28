@@ -33,12 +33,19 @@ class ViewController: UIViewController {
 
     @IBAction func didPressRefresh(_ sender: UIButton) {
         let date = Date()
-        var requestSession = Configuration.Workout.SessionRequest
-        let year = Calendar.current.component(.year, from: date)
-        let month = Calendar.current.component(.month, from: date)
-        let stringMonth = month < 10 ? "/0\(month)" : "/\(month)"
-        requestSession += "/\(year)\(stringMonth)"
-        sendSynchronousRequest(requestSession: requestSession)
+        let lastWOD = UserDefaults.standard.string(forKey: "lastWOD")
+        let oldDate = UserDefaults.standard.object(forKey: "lastDateWOD") as! Date
+        let order = Calendar.current.compare(oldDate, to: date, toGranularity: .day)
+        if lastWOD != nil && order == .orderedSame {
+            DispatchQueue.main.async {self.labelWod.text = lastWOD}
+        } else {
+            var requestSession = Configuration.Workout.SessionRequest
+            let year = Calendar.current.component(.year, from: date)
+            let month = Calendar.current.component(.month, from: date)
+            let stringMonth = month < 10 ? "/0\(month)" : "/\(month)"
+            requestSession += "/\(year)\(stringMonth)"
+            sendSynchronousRequest(requestSession: requestSession)
+        }
     }
 
     //MARK: - Auxiliary functions
@@ -61,6 +68,8 @@ class ViewController: UIViewController {
         range = stringBuilder.range(of: Configuration.Workout.StartWodRange)
         stringBuilder = stringBuilder.substring(from: (range?.upperBound)!)
         DispatchQueue.main.async {self.labelWod.text = stringBuilder as String}
+        NSLog("[NSURLConnection] Log: Received server response %@", stringBuilder)
+        UserDefaults.standard.set(stringBuilder, forKey: "lastWOD")
     }
 
     /**
@@ -79,7 +88,7 @@ class ViewController: UIViewController {
         // Setup interface
         buttonRefresh.backgroundColor = Configuration.Colors.ColorD93636
         buttonRefresh.setTitleColor(UIColor.white, for: .normal)
-        buttonRefresh.setTitle("Get WOD", for: .normal)
+        buttonRefresh.setTitle("WOD ME", for: .normal)
         labelWod.text = "Press button to receive WOD"
         labelDate.text = shareDate()
     }
@@ -99,6 +108,7 @@ class ViewController: UIViewController {
      * @param isTest The boolean parameter to check whether there is a test
      */
     func sendSynchronousRequest(requestSession: String) {
+        NSLog("[NSURLConnection] Log: Sending synch request %@", requestSession)
         var request = URLRequest.init(url: URL.init(string: requestSession)!, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 10.0)
         request.httpMethod = "GET"
         if #available(iOS 9.0, *) {

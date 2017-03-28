@@ -32,6 +32,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName : UIColor.white]
         UINavigationBar.appearance().tintColor = UIColor.white
 
+        // Manage date for updating daily wod
+        if UserDefaults.standard.object(forKey: "lastDateWOD") != nil {
+            NSLog("[UserDefaults] Log: Found previous date in local DB...")
+        } else {
+            UserDefaults.standard.set(Date(), forKey: "lastDateWOD")
+        }
+
         return true
     }
 
