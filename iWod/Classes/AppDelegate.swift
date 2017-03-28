@@ -8,14 +8,24 @@
 
 import UIKit
 
+struct Configuration {
+    struct Colors { // Constants for color definitions used in the app
+        static let Color3B5996 = UIColor.init(red: 59/255, green: 89/255, blue: 150/255, alpha: 1)
+    }
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+
+        // Customize the navigation and tab bar appearances
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName : UIColor.white]
+        UINavigationBar.appearance().tintColor = UIColor.white
+
         return true
     }
 
