@@ -32,7 +32,13 @@ class ViewController: UIViewController {
     //MARK: - IBAction implementation method
 
     @IBAction func didPressRefresh(_ sender: UIButton) {
-        NSLog("Log: refreshing...")
+        let date = Date()
+        var requestSession = Configuration.Workout.SessionRequest
+        let year = Calendar.current.component(.year, from: date)
+        let month = Calendar.current.component(.month, from: date)
+        let stringMonth = month < 10 ? "/0\(month)" : "/\(month)"
+        requestSession += "/\(year)\(stringMonth)"
+        sendSynchronousRequest(requestSession: requestSession)
     }
 
     //MARK: - Auxiliary functions
@@ -41,11 +47,18 @@ class ViewController: UIViewController {
      * Auxiliary function that parse initial content
      */
     func parse(content: String) {
-        let startString = "<h3 class=\"show\"><a href=\"/workout/2017/03/28\">"
+        let date = Date()
+        var startString = Configuration.Workout.StartRange
+        let year = Calendar.current.component(.year, from: date)
+        let month = Calendar.current.component(.month, from: date)
+        let stringMonth = month < 10 ? "/0\(month)" : "/\(month)"
+        let day = Calendar.current.component(.day, from: date)
+        startString += "/\(year)"
+        startString += stringMonth
+        startString += "/\(day)"
         var range = content.range(of: startString)
         var stringBuilder = content.substring(from: (range?.lowerBound)!)
-        let endString = "</div>"
-        range = stringBuilder.range(of: endString)
+        range = stringBuilder.range(of: Configuration.Workout.EndRange)
         stringBuilder = stringBuilder.substring(to: (range?.lowerBound)!)
         DispatchQueue.main.async {self.labelWod.text = stringBuilder as String}
     }
@@ -64,12 +77,9 @@ class ViewController: UIViewController {
         navigationItem.title = "iWOD"
 
         // Setup interface
-        buttonRefresh.titleLabel?.text = "Refresh"
+        labelWod.text = "Press button to receive WOD"
+        buttonRefresh.titleLabel?.text = "Get WOD"
         labelDate.text = shareDate()
-        labelWod.text = "Loading"
-
-        // Send synch request
-        sendSynchronousRequest(requestSession: "https://www.crossfit.com/workout/2017/03")
     }
 
     /**
