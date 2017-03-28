@@ -48,18 +48,18 @@ class ViewController: UIViewController {
      */
     func parse(content: String) {
         let date = Date()
-        var startString = Configuration.Workout.StartRange
+        var startString = Configuration.Workout.StartDayRange
         let year = Calendar.current.component(.year, from: date)
         let month = Calendar.current.component(.month, from: date)
         let stringMonth = month < 10 ? "/0\(month)" : "/\(month)"
         let day = Calendar.current.component(.day, from: date)
-        startString += "/\(year)"
-        startString += stringMonth
-        startString += "/\(day)"
+        startString += "/\(year)\(stringMonth)/\(day)"
         var range = content.range(of: startString)
         var stringBuilder = content.substring(from: (range?.lowerBound)!)
-        range = stringBuilder.range(of: Configuration.Workout.EndRange)
+        range = stringBuilder.range(of: Configuration.Workout.EndDayRange)
         stringBuilder = stringBuilder.substring(to: (range?.lowerBound)!)
+        range = stringBuilder.range(of: Configuration.Workout.StartWodRange)
+        stringBuilder = stringBuilder.substring(from: (range?.upperBound)!)
         DispatchQueue.main.async {self.labelWod.text = stringBuilder as String}
     }
 
@@ -77,8 +77,8 @@ class ViewController: UIViewController {
         navigationItem.title = "iWOD"
 
         // Setup interface
+        buttonRefresh.setTitle("Get WOD", for: .normal)
         labelWod.text = "Press button to receive WOD"
-        buttonRefresh.titleLabel?.text = "Get WOD"
         labelDate.text = shareDate()
     }
 

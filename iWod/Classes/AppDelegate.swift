@@ -14,8 +14,9 @@ struct Configuration {
     }
     struct Workout { // Constants for color definitions used in the app
         static let SessionRequest = "https://www.crossfit.com/workout"
-        static let StartRange = "<h3 class=\"show\"><a href=\"/workout"
-        static let EndRange = "</div>"
+        static let StartDayRange = "<h3 class=\"show\"><a href=\"/workout"
+        static let StartWodRange = "<div class=\"col-sm-6\">"
+        static let EndDayRange = "</div>"
     }
 }
 
