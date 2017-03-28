@@ -12,6 +12,11 @@ struct Configuration {
     struct Colors { // Constants for color definitions used in the app
         static let Color3B5996 = UIColor.init(red: 59/255, green: 89/255, blue: 150/255, alpha: 1)
     }
+    struct Workout { // Constants for color definitions used in the app
+        static let SessionRequest = "https://www.crossfit.com/workout"
+        static let StartRange = "<h3 class=\"show\"><a href=\"/workout"
+        static let EndRange = "</div>"
+    }
 }
 
 @UIApplicationMain
