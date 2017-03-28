@@ -70,13 +70,15 @@ class ViewController: UIViewController {
 
         // Setup navigation bar
         let navigationBar = navigationController?.navigationBar
-        navigationBar?.barTintColor = Configuration.Colors.Color3B5996
+        navigationBar?.barTintColor = Configuration.Colors.ColorD93636
         UIApplication.shared.statusBarStyle = .lightContent
 
         // Setup the navigation item title
         navigationItem.title = "iWOD"
 
         // Setup interface
+        buttonRefresh.backgroundColor = Configuration.Colors.ColorD93636
+        buttonRefresh.setTitleColor(UIColor.white, for: .normal)
         buttonRefresh.setTitle("Get WOD", for: .normal)
         labelWod.text = "Press button to receive WOD"
         labelDate.text = shareDate()

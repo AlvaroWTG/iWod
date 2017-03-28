@@ -10,7 +10,7 @@ import UIKit
 
 struct Configuration {
     struct Colors { // Constants for color definitions used in the app
-        static let Color3B5996 = UIColor.init(red: 59/255, green: 89/255, blue: 150/255, alpha: 1)
+        static let ColorD93636 = UIColor.init(red: 217/255, green: 54/255, blue: 54/255, alpha: 1)
     }
     struct Workout { // Constants for color definitions used in the app
         static let SessionRequest = "https://www.crossfit.com/workout"
