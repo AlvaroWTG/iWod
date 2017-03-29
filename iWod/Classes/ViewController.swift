@@ -124,6 +124,32 @@ class ViewController: UIViewController {
         UserDefaults.standard.set(imagePath, forKey: Configuration.Key.KeyLastUrl)
         UserDefaults.standard.synchronize()
     }
+
+    /**
+     * Auxiliary function that parses the html looking for the WOD
+     * - parameter html: The html string-value to parse
+     * - parameter key: The key to get string ranges
+     */
+    func parseWOD(html: String, key: String) {
+        var wod = Configuration.String.Empty
+        var range = html.range(of: key)
+        var div = html.substring(from: (range?.lowerBound)!)
+        range = div.range(of: Configuration.Tag.TagDivEnd)
+        div = div.substring(to: (range?.lowerBound)!)
+        if let doc = HTML(html: div, encoding: .utf8) {
+            var valid = false
+            for node in doc.css(Configuration.Tag.TagDivStart) {
+                if valid {
+                    wod = node.text!
+                    break
+                }
+                valid = true
+            }
+        }
+        DispatchQueue.main.async {self.labelWod.text = wod as String}
+        UserDefaults.standard.set(Date(), forKey: Configuration.Key.KeyLastDate)
+        UserDefaults.standard.set(wod, forKey: Configuration.Key.KeyLastWod)
+        UserDefaults.standard.synchronize()
     }
 
     /**
