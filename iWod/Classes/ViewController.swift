@@ -7,14 +7,18 @@
 //
 
 import UIKit
+import Alamofire
+import Kanna
 
 class ViewController: UIViewController {
 
     //MARK: Properties
 
     @IBOutlet weak var buttonRefresh: UIButton!
+    @IBOutlet weak var imageWod: UIImageView!
     @IBOutlet weak var labelDate: UILabel!
     @IBOutlet weak var labelWod: UILabel!
+    var wods: [String: String] = [:]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +57,7 @@ class ViewController: UIViewController {
     /**
      * Auxiliary function that parse initial content
      */
-    func parse(content: String) {
+    func parse(html: String) {
         let date = Date()
         var startString = Configuration.Workout.StartDayRange
         let year = Calendar.current.component(.year, from: date)
@@ -61,14 +65,14 @@ class ViewController: UIViewController {
         let stringMonth = month < 10 ? "/0\(month)" : "/\(month)"
         let day = Calendar.current.component(.day, from: date)
         startString += "/\(year)\(stringMonth)/\(day)"
-        var range = content.range(of: startString)
-        var stringBuilder = content.substring(from: (range?.lowerBound)!)
+        var range = html.range(of: startString)
+        var stringBuilder = html.substring(from: (range?.lowerBound)!)
         range = stringBuilder.range(of: Configuration.Workout.EndDayRange)
         stringBuilder = stringBuilder.substring(to: (range?.lowerBound)!)
         range = stringBuilder.range(of: Configuration.Workout.StartWodRange)
         stringBuilder = stringBuilder.substring(from: (range?.upperBound)!)
         DispatchQueue.main.async {self.labelWod.text = stringBuilder as String}
-        NSLog("[NSURLConnection] Log: Received server response %@", stringBuilder)
+        NSLog("[NSURLConnection] Log: Parsed HTML %@", stringBuilder)
         UserDefaults.standard.set(stringBuilder, forKey: "lastWOD")
     }
 
@@ -91,6 +95,7 @@ class ViewController: UIViewController {
         buttonRefresh.setTitle("WOD ME", for: .normal)
         labelWod.text = "Press button to receive WOD"
         labelDate.text = shareDate()
+        imageWod.isHidden = true
     }
 
     /**
@@ -108,24 +113,22 @@ class ViewController: UIViewController {
      * @param isTest The boolean parameter to check whether there is a test
      */
     func sendSynchronousRequest(requestSession: String) {
-        NSLog("[NSURLConnection] Log: Sending synch request %@", requestSession)
+        NSLog("[Alamofire] Log: Sending request to %@", requestSession)
         var request = URLRequest.init(url: URL.init(string: requestSession)!, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 10.0)
         request.httpMethod = "GET"
         if #available(iOS 9.0, *) {
-            let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
-                if let data = data, let result = String.init(data: data, encoding: String.Encoding.utf8) {
-                    self.parse(content: result)
-                } else if let error = error {
-                    NSLog("[NSURLConnection] Error! Found an error. Error 500: %@", error.localizedDescription)
+            Alamofire.request(request).responseString { response in
+                NSLog("[Alamofire] Log: Server response: \(response.result.isSuccess)")
+                if let html = response.result.value {
+                    self.parse(html: html)
                 }
-            })
-            task.resume()
+            }
         } else { // Fallback on earlier versions
             do {
                 var response: URLResponse?
                 let responseData = try NSURLConnection.sendSynchronousRequest(request, returning: &response)
-                let result = String.init(data: responseData, encoding: String.Encoding.utf8)
-                parse(content: result!)
+                let html = String.init(data: responseData, encoding: String.Encoding.utf8)
+                parse(html: html!)
             } catch let error as NSError {
                 NSLog("[NSURLConnection] Error! Found an error. Error %d: %@", error.code, error.localizedDescription)
             }
