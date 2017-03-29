@@ -12,6 +12,7 @@
 		74D299221E8A741100942AF6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74D299201E8A741100942AF6 /* LaunchScreen.storyboard */; };
 		74D2992E1E8A745600942AF6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D2992C1E8A745600942AF6 /* AppDelegate.swift */; };
 		74D2992F1E8A745600942AF6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D2992D1E8A745600942AF6 /* ViewController.swift */; };
+		9629EA3F002758CBC37A64F6 /* Pods_iWod.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CED3340CE31C2ACE2A82DC55 /* Pods_iWod.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,9 @@
 		74D2992B1E8A745500942AF6 /* iWod-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iWod-Bridging-Header.h"; sourceTree = "<group>"; };
 		74D2992C1E8A745600942AF6 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Classes/AppDelegate.swift; sourceTree = "<group>"; };
 		74D2992D1E8A745600942AF6 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = Classes/ViewController.swift; sourceTree = "<group>"; };
+		8B5B90D002CCA8EE60F93D54 /* Pods-iWod.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iWod.release.xcconfig"; path = "Pods/Target Support Files/Pods-iWod/Pods-iWod.release.xcconfig"; sourceTree = "<group>"; };
+		CEA9E9647BA9485A5B063D0E /* Pods-iWod.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iWod.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iWod/Pods-iWod.debug.xcconfig"; sourceTree = "<group>"; };
+		CED3340CE31C2ACE2A82DC55 /* Pods_iWod.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iWod.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -30,17 +34,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9629EA3F002758CBC37A64F6 /* Pods_iWod.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		06791BE6200AE577B99EF927 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				CEA9E9647BA9485A5B063D0E /* Pods-iWod.debug.xcconfig */,
+				8B5B90D002CCA8EE60F93D54 /* Pods-iWod.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		74D2990B1E8A741100942AF6 = {
 			isa = PBXGroup;
 			children = (
 				74D299161E8A741100942AF6 /* iWod */,
 				74D299151E8A741100942AF6 /* Products */,
+				06791BE6200AE577B99EF927 /* Pods */,
+				C29244B696459F119226EE83 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -82,6 +98,14 @@
 			name = Supporting;
 			sourceTree = "<group>";
 		};
+		C29244B696459F119226EE83 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CED3340CE31C2ACE2A82DC55 /* Pods_iWod.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -89,10 +113,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 74D299261E8A741100942AF6 /* Build configuration list for PBXNativeTarget "iWod" */;
 			buildPhases = (
+				6FE44D561DADC944E3D55D7B /* [CP] Check Pods Manifest.lock */,
 				74D299101E8A741100942AF6 /* Sources */,
 				74D299111E8A741100942AF6 /* Frameworks */,
 				74D299121E8A741100942AF6 /* Resources */,
 				74CA27C51E8BA40D00DAAE24 /* Script build */,
+				28B4ABDF581C692808879698 /* [CP] Embed Pods Frameworks */,
+				AD060C2CB4F86DC701935ECE /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -153,6 +180,36 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		28B4ABDF581C692808879698 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iWod/Pods-iWod-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6FE44D561DADC944E3D55D7B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 		74CA27C51E8BA40D00DAAE24 /* Script build */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -166,6 +223,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "buildNumber=`/bin/date +%Y%m%d%H%M%S`\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"";
+		};
+		AD060C2CB4F86DC701935ECE /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iWod/Pods-iWod-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -294,6 +366,7 @@
 		};
 		74D299271E8A741100942AF6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CEA9E9647BA9485A5B063D0E /* Pods-iWod.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -310,6 +383,7 @@
 		};
 		74D299281E8A741100942AF6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8B5B90D002CCA8EE60F93D54 /* Pods-iWod.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
