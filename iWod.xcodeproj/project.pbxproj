@@ -92,6 +92,7 @@
 				74D299101E8A741100942AF6 /* Sources */,
 				74D299111E8A741100942AF6 /* Frameworks */,
 				74D299121E8A741100942AF6 /* Resources */,
+				74CA27C51E8BA40D00DAAE24 /* Script build */,
 			);
 			buildRules = (
 			);
@@ -150,6 +151,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		74CA27C51E8BA40D00DAAE24 /* Script build */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Script build";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "buildNumber=`/bin/date +%Y%m%d%H%M%S`\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		74D299101E8A741100942AF6 /* Sources */ = {
@@ -324,6 +342,7 @@
 				74D299281E8A741100942AF6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
