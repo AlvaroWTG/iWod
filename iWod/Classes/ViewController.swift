@@ -56,6 +56,7 @@ class ViewController: UIViewController {
 
     /**
      * Auxiliary function that parse initial content
+     * - parameter html: The html string-value to parse
      */
     func parse(html: String) {
         let date = Date()
@@ -83,14 +84,14 @@ class ViewController: UIViewController {
 
         // Setup navigation bar
         let navigationBar = navigationController?.navigationBar
-        navigationBar?.barTintColor = Configuration.Colors.ColorD93636
+        navigationBar?.barTintColor = Configuration.Color.ColorD93636
         UIApplication.shared.statusBarStyle = .lightContent
 
         // Setup the navigation item title
         navigationItem.title = "iWOD"
 
         // Setup interface
-        buttonRefresh.backgroundColor = Configuration.Colors.ColorD93636
+        buttonRefresh.backgroundColor = Configuration.Color.ColorD93636
         buttonRefresh.setTitleColor(UIColor.white, for: .normal)
         buttonRefresh.setTitle("WOD ME", for: .normal)
         labelWod.text = "Press button to receive WOD"
@@ -100,6 +101,7 @@ class ViewController: UIViewController {
 
     /**
      * Auxiliary function that shares the date
+     * - returns: The current date formatted
      */
     func shareDate() -> String {
         let formatter = DateFormatter()
@@ -109,8 +111,7 @@ class ViewController: UIViewController {
 
     /**
      * Auxiliary function that obtains the reply to a request
-     * @param requestSession The request session that needs a reply
-     * @param isTest The boolean parameter to check whether there is a test
+     * - parameter requestSession: The request session that needs a reply
      */
     func sendSynchronousRequest(requestSession: String) {
         NSLog("[Alamofire] Log: Sending request to %@", requestSession)

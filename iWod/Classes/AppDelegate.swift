@@ -9,14 +9,20 @@
 import UIKit
 
 struct Configuration {
-    struct Colors { // Constants for color definitions used in the app
+    struct Color { // Constants for color definitions used in the app
         static let ColorD93636 = UIColor.init(red: 217/255, green: 54/255, blue: 54/255, alpha: 1)
     }
-    struct Workout { // Constants for color definitions used in the app
+    struct Workout { // Constant for the session request
         static let SessionRequest = "https://www.crossfit.com/workout"
-        static let StartDayRange = "<h3 class=\"show\"><a href=\"/workout"
-        static let StartWodRange = "<div class=\"col-sm-6\">"
-        static let EndDayRange = "</div>"
+    }
+    struct Tag { // Constants for tags on the HTML
+        static let TagContainer = "<div class=\"row content-container\">"
+        static let TagContainerImage = "<h3 class=\"hide\"><a href=\"/workout"
+        static let TagContainerWod = "<h3 class=\"show\"><a href=\"/workout"
+        static let TagDivWod = "<div class=\"col-sm-6\">"
+        static let TagDivEnd = "</div>"
+        static let TagNodeEnd = "\">"
+        static let TagNodeSrc = "src=\""
     }
 }
 
