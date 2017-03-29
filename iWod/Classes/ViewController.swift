@@ -37,11 +37,15 @@ class ViewController: UIViewController {
 
     @IBAction func didPressRefresh(_ sender: UIButton) {
         let date = Date()
-        let lastWOD = UserDefaults.standard.string(forKey: "lastWOD")
-        let oldDate = UserDefaults.standard.object(forKey: "lastDateWOD") as! Date
+        let lastWOD = UserDefaults.standard.string(forKey: Configuration.Key.KeyLastWod)
+        let imagePath = UserDefaults.standard.string(forKey: Configuration.Key.KeyLastUrl)
+        let oldDate = UserDefaults.standard.object(forKey: Configuration.Key.KeyLastDate) as! Date
         let order = Calendar.current.compare(oldDate, to: date, toGranularity: .day)
-        if lastWOD != nil && order == .orderedSame {
-            DispatchQueue.main.async {self.labelWod.text = lastWOD}
+        if lastWOD != nil && imagePath != nil && order == .orderedSame {
+            DispatchQueue.main.async {  // Display wod image on imageView and wod
+                self.download(url: URL.init(string: imagePath!)!)
+                self.labelWod.text = lastWOD
+            }
         } else {
             var requestSession = Configuration.Workout.SessionRequest
             let year = Calendar.current.component(.year, from: date)
@@ -164,7 +168,7 @@ class ViewController: UIViewController {
         request.httpMethod = "GET"
         if #available(iOS 9.0, *) {
             Alamofire.request(request).responseString { response in
-                NSLog("[Alamofire] Log: Server response: \(response.result.isSuccess)")
+                NSLog("[Alamofire] Log: Server response: \(response.result.description)")
                 if let html = response.result.value {
                     self.parse(html: html)
                 }

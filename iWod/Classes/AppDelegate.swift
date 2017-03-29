@@ -12,6 +12,9 @@ struct Configuration {
     struct Color { // Constants for color definitions used in the app
         static let ColorD93636 = UIColor.init(red: 217/255, green: 54/255, blue: 54/255, alpha: 1)
     }
+    struct String { // Constant for the session request
+        static let Empty = ""
+    }
     struct Workout { // Constant for the session request
         static let SessionRequest = "https://www.crossfit.com/workout"
     }
@@ -20,9 +23,16 @@ struct Configuration {
         static let TagContainerImage = "<h3 class=\"hide\"><a href=\"/workout"
         static let TagContainerWod = "<h3 class=\"show\"><a href=\"/workout"
         static let TagDivWod = "<div class=\"col-sm-6\">"
+        static let TagDivStart = "div"
         static let TagDivEnd = "</div>"
         static let TagNodeEnd = "\">"
         static let TagNodeSrc = "src=\""
+        static let TagDivA = "a"
+    }
+    struct Key { // Constants for the user default keys
+        static let KeyLastDate = "lastDateWOD"
+        static let KeyLastUrl = "lastURL"
+        static let KeyLastWod = "lastWOD"
     }
 }
 
@@ -39,10 +49,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().tintColor = UIColor.white
 
         // Manage date for updating daily wod
-        if UserDefaults.standard.object(forKey: "lastDateWOD") != nil {
+        if UserDefaults.standard.object(forKey: Configuration.Key.KeyLastDate) != nil {
             NSLog("[UserDefaults] Log: Found previous date in local DB...")
         } else {
-            UserDefaults.standard.set(Date(), forKey: "lastDateWOD")
+            UserDefaults.standard.set(Date(), forKey: Configuration.Key.KeyLastDate)
+            UserDefaults.standard.synchronize()
         }
 
         return true
