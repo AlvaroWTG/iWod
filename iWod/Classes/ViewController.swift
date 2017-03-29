@@ -59,22 +59,27 @@ class ViewController: UIViewController {
      * - parameter html: The html string-value to parse
      */
     func parse(html: String) {
-        let date = Date()
-        var startString = Configuration.Workout.StartDayRange
-        let year = Calendar.current.component(.year, from: date)
-        let month = Calendar.current.component(.month, from: date)
-        let stringMonth = month < 10 ? "/0\(month)" : "/\(month)"
-        let day = Calendar.current.component(.day, from: date)
-        startString += "/\(year)\(stringMonth)/\(day)"
-        var range = html.range(of: startString)
-        var stringBuilder = html.substring(from: (range?.lowerBound)!)
-        range = stringBuilder.range(of: Configuration.Workout.EndDayRange)
-        stringBuilder = stringBuilder.substring(to: (range?.lowerBound)!)
-        range = stringBuilder.range(of: Configuration.Workout.StartWodRange)
-        stringBuilder = stringBuilder.substring(from: (range?.upperBound)!)
-        DispatchQueue.main.async {self.labelWod.text = stringBuilder as String}
-        NSLog("[NSURLConnection] Log: Parsed HTML %@", stringBuilder)
-        UserDefaults.standard.set(stringBuilder, forKey: "lastWOD")
+
+        // Setup string range for container
+        let range = html.range(of: Configuration.Tag.TagContainer)
+        let container = html.substring(from: (range?.lowerBound)!)
+
+        // Setup calendar components for today
+        let year = Calendar.current.component(.year, from: Date())
+        let month = Calendar.current.component(.month, from: Date())
+        let monthBuilder = month < 10 ? "/0\(month)" : "/\(month)"
+        let day = Calendar.current.component(.day, from: Date())
+
+        // Parse container for image
+        var key = Configuration.Tag.TagContainerImage
+        key += "/\(year)\(monthBuilder)/\(day)"
+        parseImage(html: container, key: key)
+
+        // Parse container for wod
+        key = Configuration.Tag.TagContainerWod
+        key += "/\(year)\(monthBuilder)/\(day)"
+        parseWOD(html: container, key: key)
+    }
     }
 
     /**
