@@ -55,6 +55,18 @@ class ViewController: UIViewController {
     //MARK: - Auxiliary functions
 
     /**
+     * Auxiliary function that downloads from an URL
+     * - parameter url: The url string-value to download
+     */
+    func download(url: URL) {
+        let data = try? Data.init(contentsOf: url)
+        DispatchQueue.main.async { // Display wod image on imageView
+            self.imageWod.image = UIImage(data:data!)
+            self.imageWod.isHidden = data == nil
+        }
+    }
+
+    /**
      * Auxiliary function that parse initial content
      * - parameter html: The html string-value to parse
      */
@@ -79,6 +91,34 @@ class ViewController: UIViewController {
         key = Configuration.Tag.TagContainerWod
         key += "/\(year)\(monthBuilder)/\(day)"
         parseWOD(html: container, key: key)
+    }
+
+    /**
+     * Auxiliary function that parses the html looking for the image url
+     * - parameter html: The html string-value to parse
+     * - parameter key: The key to get string ranges
+     */
+    func parseImage(html: String, key: String) {
+        var imagePath = Configuration.String.Empty
+        var range = html.range(of: key)
+        var div = html.substring(from: (range?.lowerBound)!)
+        range = div.range(of: Configuration.Tag.TagDivEnd)
+        div = div.substring(to: (range?.lowerBound)!)
+        if let doc = HTML(html: div, encoding: .utf8) {
+            for node in doc.css(Configuration.Tag.TagDivA) {
+                var nodeRange = node.innerHTML?.range(of: Configuration.Tag.TagNodeSrc)
+                if nodeRange != nil {
+                    imagePath = (node.innerHTML?.substring(from: (nodeRange?.upperBound)!))!
+                    nodeRange = imagePath.range(of: Configuration.Tag.TagNodeEnd)
+                    imagePath = imagePath.substring(to: (nodeRange?.lowerBound)!)
+                }
+            }
+        }
+
+        // Download image and store last URL value to get it later
+        download(url: URL.init(string: imagePath)!)
+        UserDefaults.standard.set(imagePath, forKey: Configuration.Key.KeyLastUrl)
+        UserDefaults.standard.synchronize()
     }
     }
 
