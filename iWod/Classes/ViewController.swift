@@ -14,11 +14,13 @@ class ViewController: UIViewController {
 
     //MARK: Properties
 
-    @IBOutlet weak var buttonRefresh: UIButton!
+    @IBOutlet weak var buttonContinue: UIButton!
+    @IBOutlet weak var buttonCancel: UIButton!
     @IBOutlet weak var imageWod: UIImageView!
     @IBOutlet weak var labelDate: UILabel!
     @IBOutlet weak var labelWod: UILabel!
-    var wods: [String: String] = [:]
+    var dictionary:[String: Array<String>] = [:]
+    var index = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +35,7 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    //MARK: - IBAction implementation method
+    //MARK: - IBAction implementation methods
 
     @IBAction func didPressRefresh(_ sender: UIButton) {
         let date = Date()
@@ -54,6 +56,9 @@ class ViewController: UIViewController {
             requestSession += "/\(year)\(stringMonth)"
             sendSynchronousRequest(requestSession: requestSession)
         }
+    @IBAction func didPressCancel(_ sender: UIButton) {
+        index += 1
+        refresh()
     }
 
     //MARK: - Auxiliary functions
@@ -166,10 +171,13 @@ class ViewController: UIViewController {
         navigationItem.title = "iWOD"
 
         // Setup interface
-        buttonRefresh.backgroundColor = Configuration.Color.ColorD93636
-        buttonRefresh.setTitleColor(UIColor.white, for: .normal)
-        buttonRefresh.setTitle("WOD ME", for: .normal)
-        labelWod.text = "Press button to receive WOD"
+        buttonContinue.backgroundColor = Configuration.Color.ColorD93636
+        buttonCancel.setTitleColor(Configuration.Color.ColorD93636, for: .normal)
+        buttonContinue.setTitleColor(UIColor.white, for: .normal)
+        buttonCancel.setTitle("PREVIOUS", for: .normal)
+        buttonContinue.setTitle("NEXT", for: .normal)
+        buttonContinue.isEnabled = false
+        buttonCancel.isEnabled = true
         labelDate.text = shareDate()
         imageWod.isHidden = true
     }
