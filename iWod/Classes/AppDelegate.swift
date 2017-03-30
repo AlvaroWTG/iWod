@@ -29,11 +29,6 @@ struct Configuration {
         static let TagNodeSrc = "src=\""
         static let TagDivA = "a"
     }
-    struct Key { // Constants for the user default keys
-        static let KeyLastDate = "lastDateWOD"
-        static let KeyLastUrl = "lastURL"
-        static let KeyLastWod = "lastWOD"
-    }
 }
 
 @UIApplicationMain
@@ -47,15 +42,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Customize the navigation and tab bar appearances
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName : UIColor.white]
         UINavigationBar.appearance().tintColor = UIColor.white
-
-        // Manage date for updating daily wod
-        if UserDefaults.standard.object(forKey: Configuration.Key.KeyLastDate) != nil {
-            NSLog("[UserDefaults] Log: Found previous date in local DB...")
-        } else {
-            UserDefaults.standard.set(Date(), forKey: Configuration.Key.KeyLastDate)
-            UserDefaults.standard.synchronize()
-        }
-
         return true
     }
 

@@ -13,13 +13,20 @@ import Kanna
 class ViewController: UIViewController {
 
     //MARK: Properties
-
+    
+    /** Property that represents the button for next wod */
     @IBOutlet weak var buttonContinue: UIButton!
+    /** Property that represents the button for previous wod */
     @IBOutlet weak var buttonCancel: UIButton!
+    /** Property that represents the image for the wod icon */
     @IBOutlet weak var imageWod: UIImageView!
+    /** Property that represents the date of the wod */
     @IBOutlet weak var labelDate: UILabel!
+    /** Property that represents the description of the wod */
     @IBOutlet weak var labelWod: UILabel!
+    /** Property that represents the dictionary of links and wods */
     var dictionary:[String: Array<String>] = [:]
+    /** Property that represents the index of the wod presented */
     var index = 0
 
     override func viewDidLoad() {
