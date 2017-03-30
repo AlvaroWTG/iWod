@@ -102,22 +102,25 @@ class ViewController: UIViewController {
      */
     func parse(html: String) {
 
-        // Setup string range for container
-        var range = html.range(of: "<section id=\"archives\" class=\"section\">")
-        let containerHybrid = html.substring(from: (range?.upperBound)!)
+        // Navigate into the container
+        var range = html.range(of: Configuration.Tag.TagContainer)
+        let container = html.substring(from: (range?.upperBound)!)
 
-        range = containerHybrid.range(of: "<div class=\"container-hybrid\">")
-        let rows = containerHybrid.substring(from: (range?.upperBound)!)
+        // Navigate into the container hybrid containing the rows
+        range = container.range(of: Configuration.Tag.TagContainerHybrid)
+        let containerHybrid = container.substring(from: (range?.upperBound)!)
 
-        // Setup calendar components for today
-        if let doc = HTML(html: rows, encoding: .utf8) {
-            let listImages = parseImage(html: doc)
-            let listWods = parseWOD(html: doc)
+        // Loop around the rows and get links and wods
+        if let document = HTML(html: containerHybrid, encoding: .utf8) {
+            let listImages = parseImage(html: document)
+            let listWods = parseWOD(html: document)
             var i = 0
             for link in listImages {
-                let keyDictionary = keyForRow(row: i)
-                dictionary[keyDictionary] = [link, listWods[i]]
-                i += 1
+                if i < listWods.count {
+                    let keyDictionary = keyForRow(row: i)
+                    dictionary[keyDictionary] = [link, listWods[i]]
+                    i += 1
+                }
             }
         }
         refresh()
