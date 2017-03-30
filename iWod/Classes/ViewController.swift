@@ -96,24 +96,24 @@ class ViewController: UIViewController {
     func parse(html: String) {
 
         // Setup string range for container
-        let range = html.range(of: Configuration.Tag.TagContainer)
-        let container = html.substring(from: (range?.lowerBound)!)
+        var range = html.range(of: "<section id=\"archives\" class=\"section\">")
+        let containerHybrid = html.substring(from: (range?.upperBound)!)
+
+        range = containerHybrid.range(of: "<div class=\"container-hybrid\">")
+        let rows = containerHybrid.substring(from: (range?.upperBound)!)
 
         // Setup calendar components for today
-        let year = Calendar.current.component(.year, from: Date())
-        let month = Calendar.current.component(.month, from: Date())
-        let monthBuilder = month < 10 ? "/0\(month)" : "/\(month)"
-        let day = Calendar.current.component(.day, from: Date())
-
-        // Parse container for image
-        var key = Configuration.Tag.TagContainerImage
-        key += "/\(year)\(monthBuilder)/\(day)"
-        parseImage(html: container, key: key)
-
-        // Parse container for wod
-        key = Configuration.Tag.TagContainerWod
-        key += "/\(year)\(monthBuilder)/\(day)"
-        parseWOD(html: container, key: key)
+        if let doc = HTML(html: rows, encoding: .utf8) {
+            let listImages = parseImage(html: doc)
+            let listWods = parseWOD(html: doc)
+            var i = 0
+            for link in listImages {
+                let keyDictionary = keyForRow(row: i)
+                dictionary[keyDictionary] = [link, listWods[i]]
+                i += 1
+            }
+        }
+        refresh()
     }
 
     /**
