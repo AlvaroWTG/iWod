@@ -14,6 +14,7 @@ struct Configuration {
     }
     struct String { // Constant for the session request
         static let Empty = ""
+        static let Get = "GET"
     }
     struct Workout { // Constant for the session request
         static let SessionRequest = "https://www.crossfit.com/workout"

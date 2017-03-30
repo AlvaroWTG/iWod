@@ -222,22 +222,11 @@ class ViewController: UIViewController {
     func sendSynchronousRequest(requestSession: String) {
         NSLog("[Alamofire] Log: Sending request to %@", requestSession)
         var request = URLRequest.init(url: URL.init(string: requestSession)!, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 10.0)
-        request.httpMethod = "GET"
-        if #available(iOS 9.0, *) {
-            Alamofire.request(request).responseString { response in
-                NSLog("[Alamofire] Log: Server response: \(response.result.description)")
-                if let html = response.result.value {
-                    self.parse(html: html)
-                }
-            }
-        } else { // Fallback on earlier versions
-            do {
-                var response: URLResponse?
-                let responseData = try NSURLConnection.sendSynchronousRequest(request, returning: &response)
-                let html = String.init(data: responseData, encoding: String.Encoding.utf8)
-                parse(html: html!)
-            } catch let error as NSError {
-                NSLog("[NSURLConnection] Error! Found an error. Error %d: %@", error.code, error.localizedDescription)
+        request.httpMethod = Configuration.String.Get
+        Alamofire.request(request).responseString { response in
+            NSLog("[Alamofire] Log: Server response: \(response.result.description)")
+            if let html = response.result.value {
+                self.parse(html: html)
             }
         }
     }
