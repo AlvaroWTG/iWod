@@ -19,15 +19,14 @@ struct Configuration {
         static let SessionRequest = "https://www.crossfit.com/workout"
     }
     struct Tag { // Constants for tags on the HTML
-        static let TagContainer = "<div class=\"row content-container\">"
-        static let TagContainerImage = "<h3 class=\"hide\"><a href=\"/workout"
-        static let TagContainerWod = "<h3 class=\"show\"><a href=\"/workout"
-        static let TagDivWod = "<div class=\"col-sm-6\">"
-        static let TagDivStart = "div"
-        static let TagDivEnd = "</div>"
+        static let TagContainer = "<section id=\"archives\" class=\"section\">"
+        static let TagContainerHybrid = "<div class=\"container-hybrid\">"
+        static let TagDivHref = "href"
         static let TagNodeEnd = "\">"
         static let TagNodeSrc = "src=\""
-        static let TagDivA = "a"
+        static let TagDivAImg = "a, img"
+        static let TagDivP = "p"
+        static let TagDivPost = "Post"
     }
 }
 
