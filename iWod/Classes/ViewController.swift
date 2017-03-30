@@ -168,6 +168,7 @@ class ViewController: UIViewController {
         if let parameters = dictionary[keyForRow(row: index)] {
             download(url: URL.init(string: (parameters[0]))!)
             DispatchQueue.main.async {
+                self.labelDate.text = self.shareDate()
                 self.labelWod.text = parameters[1] as String
                 self.buttonContinue.isEnabled = self.index > 0
                 self.buttonCancel.isEnabled = self.index <= self.dictionary.count
@@ -196,7 +197,6 @@ class ViewController: UIViewController {
         buttonContinue.setTitle("NEXT", for: .normal)
         buttonContinue.isEnabled = false
         buttonCancel.isEnabled = true
-        labelDate.text = shareDate()
         imageWod.isHidden = true
     }
 
@@ -205,9 +205,11 @@ class ViewController: UIViewController {
      * - returns: The current date formatted
      */
     func shareDate() -> String {
+        let interval = TimeInterval(-24 * index * 60 * 60)
+        let date = Date().addingTimeInterval(interval)
         let formatter = DateFormatter()
         formatter.dateStyle = .full
-        return formatter.string(from: Date())
+        return formatter.string(from: date)
     }
 
     /**
