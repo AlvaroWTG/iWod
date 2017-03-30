@@ -27,6 +27,8 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
 
         // Setup interface
+        dictionary = [:] as! [String : Array]
+        DispatchQueue.global().async {self.fetch()}
         setupInterface()
     }
 
@@ -38,24 +40,10 @@ class ViewController: UIViewController {
     //MARK: - IBAction implementation methods
 
     @IBAction func didPressRefresh(_ sender: UIButton) {
-        let date = Date()
-        let lastWOD = UserDefaults.standard.string(forKey: Configuration.Key.KeyLastWod)
-        let imagePath = UserDefaults.standard.string(forKey: Configuration.Key.KeyLastUrl)
-        let oldDate = UserDefaults.standard.object(forKey: Configuration.Key.KeyLastDate) as! Date
-        let order = Calendar.current.compare(oldDate, to: date, toGranularity: .day)
-        if lastWOD != nil && imagePath != nil && order == .orderedSame {
-            DispatchQueue.main.async {  // Display wod image on imageView and wod
-                self.download(url: URL.init(string: imagePath!)!)
-                self.labelWod.text = lastWOD
-            }
-        } else {
-            var requestSession = Configuration.Workout.SessionRequest
-            let year = Calendar.current.component(.year, from: date)
-            let month = Calendar.current.component(.month, from: date)
-            let stringMonth = month < 10 ? "/0\(month)" : "/\(month)"
-            requestSession += "/\(year)\(stringMonth)"
-            sendSynchronousRequest(requestSession: requestSession)
-        }
+        index -= 1
+        refresh()
+    }
+
     @IBAction func didPressCancel(_ sender: UIButton) {
         index += 1
         refresh()
@@ -76,6 +64,16 @@ class ViewController: UIViewController {
     }
 
     /**
+     * Auxiliary function that fetchs html content
+     */
+    func fetch() {
+        var requestSession = Configuration.Workout.SessionRequest
+        let year = Calendar.current.component(.year, from: Date())
+        let month = Calendar.current.component(.month, from: Date())
+        let stringMonth = month < 10 ? "/0\(month)" : "/\(month)"
+        requestSession += "/\(year)\(stringMonth)"
+        sendSynchronousRequest(requestSession: requestSession)
+    }
      * Auxiliary function that parse initial content
      * - parameter html: The html string-value to parse
      */
