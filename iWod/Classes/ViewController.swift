@@ -129,7 +129,7 @@ class ViewController: UIViewController {
      */
     func parseImage(html: HTMLDocument) -> Array<String> {
         var result:Array<String> = []
-        for node in html.css("a, img") { // parse for image
+        for node in html.css(Configuration.Tag.TagDivAImg) { // parse for image paths
             var nodeRange = node.innerHTML?.range(of: Configuration.Tag.TagNodeSrc)
             if nodeRange != nil {
                 var imagePath = (node.innerHTML?.substring(from: (nodeRange?.upperBound)!))!
@@ -147,14 +147,14 @@ class ViewController: UIViewController {
      */
     func parseWOD(html: HTMLDocument) -> Array<String> {
         var result:Array<String> = []
-        for node in html.css("p") { // parse for wod
-            var nodeRange = node.innerHTML?.range(of: "<br>")
-            if nodeRange != nil {
-                nodeRange = node.innerHTML?.range(of: "href")
-                if nodeRange == nil {
-                    print("======= WOD =========")
-                    print(node.text ?? "") // wod
-                    result.append(node.text!)
+        var wod = Configuration.String.Empty
+        for node in html.css(Configuration.Tag.TagDivP) { // parse for wods
+            if node.innerHTML?.range(of: Configuration.Tag.TagDivHref) == nil {
+                if node.innerHTML?.range(of: Configuration.Tag.TagDivPost) == nil { // concatenate wod
+                    wod = wod.isEmpty ? node.text! : wod + "\n\(node.text!)"
+                } else {
+                    result.append(wod)
+                    wod = ""
                 }
             }
         }
