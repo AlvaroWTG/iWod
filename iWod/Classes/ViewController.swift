@@ -74,6 +74,22 @@ class ViewController: UIViewController {
         requestSession += "/\(year)\(stringMonth)"
         sendSynchronousRequest(requestSession: requestSession)
     }
+
+    /**
+     * Auxiliary function that gets the key for a row
+     * - parameter row: The integer value of the row
+     */
+    func keyForRow(row: Int) -> String {
+        let interval = TimeInterval(-24 * row * 60 * 60)
+        let date = Date().addingTimeInterval(interval)
+        let month = Calendar.current.component(.month, from: date)
+        let monthBuilder = month < 10 ? "0\(month)" : "\(month)"
+        let day = Calendar.current.component(.day, from: date)
+        let keyDictionary = "17\(monthBuilder)\(day)"
+        return keyDictionary
+    }
+
+    /**
      * Auxiliary function that parse initial content
      * - parameter html: The html string-value to parse
      */
@@ -153,6 +169,18 @@ class ViewController: UIViewController {
         UserDefaults.standard.set(Date(), forKey: Configuration.Key.KeyLastDate)
         UserDefaults.standard.set(wod, forKey: Configuration.Key.KeyLastWod)
         UserDefaults.standard.synchronize()
+    /**
+     * Auxiliary function that refreshes the interface
+     */
+    func refresh() {
+        if let parameters = dictionary[keyForRow(row: index)] {
+            download(url: URL.init(string: (parameters[0]))!)
+            DispatchQueue.main.async {
+                self.labelWod.text = parameters[1] as String
+                self.buttonContinue.isEnabled = self.index > 0
+                self.buttonCancel.isEnabled = self.index <= self.dictionary.count
+            }
+        }
     }
 
     /**
