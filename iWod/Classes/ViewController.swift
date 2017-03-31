@@ -200,6 +200,8 @@ class ViewController: UIViewController {
         buttonContinue.setTitle("NEXT", for: .normal)
         buttonContinue.isEnabled = false
         buttonCancel.isEnabled = true
+        labelDate.text = shareDate()
+        labelWod.text = "Loading"
         imageWod.isHidden = true
     }
 
