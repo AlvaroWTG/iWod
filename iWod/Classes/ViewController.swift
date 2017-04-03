@@ -56,6 +56,20 @@ class ViewController: UIViewController {
         refresh()
     }
 
+    //MARK: - Gesture recognizer handler method
+
+    func didSwipe(gesture: UISwipeGestureRecognizer) {
+        switch gesture.direction {
+        case UISwipeGestureRecognizerDirection.right:
+            index += 1
+        case UISwipeGestureRecognizerDirection.left:
+            index -= 1
+        default:
+            break
+        }
+        refresh()
+    }
+
     //MARK: - Auxiliary functions
 
     /**
@@ -203,6 +217,14 @@ class ViewController: UIViewController {
         labelDate.text = shareDate()
         labelWod.text = "Loading"
         imageWod.isHidden = true
+
+        // Setup swipe gesture recognizers
+        let swipePrevious = UISwipeGestureRecognizer(target: self, action: #selector(self.didSwipe(gesture:)))
+        let swipeNext = UISwipeGestureRecognizer(target: self, action: #selector(self.didSwipe(gesture:)))
+        swipePrevious.direction = .right
+        swipeNext.direction = .left
+        self.view.addGestureRecognizer(swipePrevious)
+        self.view.addGestureRecognizer(swipeNext)
     }
 
     /**
