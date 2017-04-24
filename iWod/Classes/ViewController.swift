@@ -9,8 +9,9 @@
 import UIKit
 import Alamofire
 import Kanna
+import MessageUI
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
 
     //MARK: Properties
     
@@ -52,8 +53,9 @@ class ViewController: UIViewController {
     }
 
     @IBAction func didPressCancel(_ sender: UIButton) {
-        index += 1
-        refresh()
+//        index += 1
+//        refresh()
+        loadPDF()
     }
 
     //MARK: - Gesture recognizer handler method
@@ -253,6 +255,61 @@ class ViewController: UIViewController {
                 self.parse(html: html)
             }
         }
+    }
+
+    //MARK: - PDF creator
+
+    func createPDF() {
+        let html = "<b>Hello <i>Cervi!</i></b> <p>Generated PDF file from HTML in Swift. Primera prueba creando un PDF desde una cadena de texto. A ver como sale</p>"
+        let fmt = UIMarkupTextPrintFormatter(markupText: html)
+
+        // 2. Assign print formatter to UIPrintPageRenderer
+        let render = UIPrintPageRenderer()
+        render.addPrintFormatter(fmt, startingAtPageAt: 0)
+
+        // 3. Assign paperRect and printableRect
+        let page = CGRect(x: 0, y: 0, width: 595.2, height: 841.8) // A4, 72 dpi
+        let printable = page.insetBy(dx: 0, dy: 0)
+        render.setValue(NSValue(cgRect: page), forKey: "paperRect")
+        render.setValue(NSValue(cgRect: printable), forKey: "printableRect")
+
+        // 4. Create PDF context and draw
+        let pdfData = NSMutableData()
+        UIGraphicsBeginPDFContextToData(pdfData, CGRect.zero, nil)
+        for i in 1...render.numberOfPages {
+            UIGraphicsBeginPDFPage();
+            let bounds = UIGraphicsGetPDFContextBounds()
+            render.drawPage(at: i - 1, in: bounds)
+        }
+        UIGraphicsEndPDFContext();
+
+        // 5. Save PDF file
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        pdfData.write(toFile: "\(documentsPath)/file-pdf.pdf", atomically: true)
+    }
+
+    func loadPDF() {
+        createPDF()
+        let mailComposerVC = MFMailComposeViewController()
+        mailComposerVC.mailComposeDelegate = self // Extremely important to set the --mailComposeDelegate-- property, NOT the --delegate-- property
+        mailComposerVC.setToRecipients(["a.gm.herrera@gmail.com", "carloscervera@hcmc.es"])
+        mailComposerVC.setSubject("Enviando email desde app de Watito (prueba)...")
+        mailComposerVC.setMessageBody("Este es el cuerpo de email, que ahora esta vacio!", isHTML: false)
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        let filePath = "\(documentsPath)/file-pdf.pdf"
+        let fileData = NSData(contentsOfFile: filePath)
+        mailComposerVC.addAttachmentData(fileData! as Data, mimeType: "application/pdf", fileName: "file-pdf")
+        if MFMailComposeViewController.canSendMail() {
+            self.present(mailComposerVC, animated: true, completion: nil)
+        } else {
+            print("Mail services are not available")
+            return
+        }
+    }
+
+    // MARK: - MFMailComposeViewControllerDelegate Method
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
     }
 }
 
