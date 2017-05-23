@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import Kanna
 import MessageUI
+import UserNotifications
 
 class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
 
@@ -17,8 +18,6 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
     
     /** Property that represents the button for next wod */
     @IBOutlet weak var buttonContinue: UIButton!
-    /** Property that represents the button for previous wod */
-    @IBOutlet weak var buttonCancel: UIButton!
     /** Property that represents the image for the wod icon */
     @IBOutlet weak var imageWod: UIImageView!
     /** Property that represents the date of the wod */
@@ -48,14 +47,28 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
     //MARK: - IBAction implementation methods
 
     @IBAction func didPressRefresh(_ sender: UIButton) {
-        index -= 1
-        refresh()
-    }
 
-    @IBAction func didPressCancel(_ sender: UIButton) {
-//        index += 1
-//        refresh()
-        loadPDF()
+        let center = UNUserNotificationCenter.current()
+        let content = UNMutableNotificationContent()
+        content.title = "iWod"
+        content.body = "Hora de reservar crossfit."
+        content.sound = UNNotificationSound.default()
+        content.badge = 1
+
+        var referenceDate = DateComponents()
+        referenceDate.hour = 23
+        referenceDate.minute = 59
+        referenceDate.second = 55
+
+        let trigger = UNCalendarNotificationTrigger(dateMatching: referenceDate, repeats: true)
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        center.add(request) { (NSError) in
+            if let error = NSError {
+                NSLog("[UNUserNotificationCenter] Error 404 - %@", error.localizedDescription)
+            } else {
+                NSLog("Log: Added notification request")
+            }
+        }
     }
 
     //MARK: - Gesture recognizer handler method
@@ -189,8 +202,6 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
             DispatchQueue.main.async {
                 self.labelDate.text = self.shareDate()
                 self.labelWod.text = parameters[1] as String
-                self.buttonContinue.isEnabled = self.index > 0
-                self.buttonCancel.isEnabled = self.index <= self.dictionary.count
             }
         }
     }
@@ -210,12 +221,8 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
 
         // Setup interface
         buttonContinue.backgroundColor = Configuration.Color.ColorD93636
-        buttonCancel.setTitleColor(Configuration.Color.ColorD93636, for: .normal)
         buttonContinue.setTitleColor(UIColor.white, for: .normal)
-        buttonCancel.setTitle("PREVIOUS", for: .normal)
         buttonContinue.setTitle("NEXT", for: .normal)
-        buttonContinue.isEnabled = false
-        buttonCancel.isEnabled = true
         labelDate.text = shareDate()
         labelWod.text = "Loading"
         imageWod.isHidden = true
