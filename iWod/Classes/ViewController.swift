@@ -212,6 +212,12 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
     }
 
     /**
+     * Auxiliary function that pushes the safari view controller
+     */
+    func pushSafariViewController() {
+    }
+
+    /**
      * Auxiliary function that refreshes the interface
      */
     func refresh() {
@@ -235,6 +241,7 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
         UIApplication.shared.statusBarStyle = .lightContent
 
         // Setup the navigation item title
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(pushSafariViewController))
         navigationItem.title = "iWOD"
 
         // Setup interface
