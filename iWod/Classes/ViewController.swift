@@ -199,6 +199,16 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
     }
 
     /**
+     * Auxiliary function that pushes an alert view
+     * - parameter message: The string value for the message
+     */
+    func pushAlertView(message: String) {
+        let alert = UIAlertController(title: "KLAN", message: message, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+
+    /**
      * Auxiliary function that refreshes the interface
      */
     func refresh() {
