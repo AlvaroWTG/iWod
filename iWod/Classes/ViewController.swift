@@ -28,6 +28,8 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
     var dictionary:[String: Array<String>] = [:]
     /** Property that represents the index of the wod presented */
     var index = 0
+    /** Property that represents whether the notification is set or not */
+    var isSet = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,6 +69,9 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
                 NSLog("[UNUserNotificationCenter] Error 404 - %@", error.localizedDescription)
             } else {
                 NSLog("Log: Added notification request")
+        if self.isSet == true {
+            pushAlertView(message: "You have already setup a reminder")
+        } else {
             }
         }
     }
