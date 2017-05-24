@@ -49,29 +49,32 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
     //MARK: - IBAction implementation methods
 
     @IBAction func didPressRefresh(_ sender: UIButton) {
-
-        let center = UNUserNotificationCenter.current()
-        let content = UNMutableNotificationContent()
-        content.title = "iWod"
-        content.body = "Hora de reservar crossfit."
-        content.sound = UNNotificationSound.default()
-        content.badge = 1
-
-        var referenceDate = DateComponents()
-        referenceDate.hour = 23
-        referenceDate.minute = 59
-        referenceDate.second = 55
-
-        let trigger = UNCalendarNotificationTrigger(dateMatching: referenceDate, repeats: true)
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-        center.add(request) { (NSError) in
-            if let error = NSError {
-                NSLog("[UNUserNotificationCenter] Error 404 - %@", error.localizedDescription)
-            } else {
-                NSLog("Log: Added notification request")
         if self.isSet == true {
             pushAlertView(message: "You have already setup a reminder")
         } else {
+            let center = UNUserNotificationCenter.current()
+            center.removeAllPendingNotificationRequests()
+            let content = UNMutableNotificationContent()
+            content.title = "It's Crossfit Time"
+            content.body = "Time to book next week 7am class."
+            content.sound = UNNotificationSound.default()
+            content.badge = 1
+
+            var referenceDate = DateComponents()
+            referenceDate.hour = 00
+            referenceDate.minute = 01
+            referenceDate.second = 00
+
+            let trigger = UNCalendarNotificationTrigger(dateMatching: referenceDate, repeats: true)
+            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+            center.add(request) { (NSError) in
+                if let error = NSError {
+                    self.pushAlertView(message: "Error 404 -\(error.localizedDescription)")
+                    self.isSet = false
+                } else {
+                    self.pushAlertView(message: "Notification request succesfully created")
+                    self.isSet = true
+                }
             }
         }
     }
