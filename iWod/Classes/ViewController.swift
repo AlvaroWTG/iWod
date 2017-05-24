@@ -11,8 +11,9 @@ import Alamofire
 import Kanna
 import MessageUI
 import UserNotifications
+import SafariServices
 
-class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
+class ViewController: UIViewController, MFMailComposeViewControllerDelegate, SFSafariViewControllerDelegate {
 
     //MARK: Properties
     
@@ -77,6 +78,12 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
                 }
             }
         }
+    }
+
+    //MARK: - Inherited functions from SFSafariViewController delegate
+
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        dismiss(animated: true)
     }
 
     //MARK: - Gesture recognizer handler method
@@ -215,6 +222,15 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
      * Auxiliary function that pushes the safari view controller
      */
     func pushSafariViewController() {
+        let urlString = "https://browod.com/booking"
+        if let url = URL(string: urlString) {
+            let component = SFSafariViewController(url: url, entersReaderIfAvailable: true)
+            component.preferredBarTintColor = Configuration.Color.ColorD93636
+            component.preferredControlTintColor = .white
+            component.modalPresentationStyle = .popover
+            component.delegate = self
+            present(component, animated: true)
+        }
     }
 
     /**
