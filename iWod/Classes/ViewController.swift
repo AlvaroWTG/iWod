@@ -11,9 +11,8 @@ import Alamofire
 import Kanna
 import MessageUI
 import UserNotifications
-import SafariServices
 
-class ViewController: UIViewController, MFMailComposeViewControllerDelegate, SFSafariViewControllerDelegate {
+class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
 
     //MARK: Properties
 
@@ -47,7 +46,7 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate, SFS
 
     //MARK: - IBAction implementation methods
 
-    @IBAction func didPressRefresh(_ sender: UIButton) {
+    func didPressRefresh(_ sender: UIButton) {
         if self.isSet == true {
             pushAlertView(message: "You have already setup a reminder")
         } else {
@@ -76,12 +75,6 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate, SFS
                 }
             }
         }
-    }
-
-    //MARK: - Inherited functions from SFSafariViewController delegate
-
-    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
-        dismiss(animated: true)
     }
 
     //MARK: - Gesture recognizer handler method
@@ -220,15 +213,6 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate, SFS
      * Auxiliary function that pushes the safari view controller
      */
     func pushSafariViewController() {
-        let urlString = "https://browod.com/booking"
-        if let url = URL(string: urlString) {
-            let component = SFSafariViewController(url: url, entersReaderIfAvailable: true)
-            component.preferredBarTintColor = Configuration.Color.ColorD93636
-            component.preferredControlTintColor = .white
-            component.modalPresentationStyle = .popover
-            component.delegate = self
-            present(component, animated: true)
-        }
     }
 
     /**
@@ -255,7 +239,7 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate, SFS
         UIApplication.shared.statusBarStyle = .lightContent
 
         // Setup the navigation item title
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(pushSafariViewController))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didPressRefresh(_:)))
         navigationItem.title = "iWOD"
 
         // Setup interface
