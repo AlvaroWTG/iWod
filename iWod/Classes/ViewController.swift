@@ -16,9 +16,7 @@ import SafariServices
 class ViewController: UIViewController, MFMailComposeViewControllerDelegate, SFSafariViewControllerDelegate {
 
     //MARK: Properties
-    
-    /** Property that represents the button for next wod */
-    @IBOutlet weak var buttonContinue: UIButton!
+
     /** Property that represents the image for the wod icon */
     @IBOutlet weak var imageWod: UIImageView!
     /** Property that represents the date of the wod */
@@ -261,9 +259,6 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate, SFS
         navigationItem.title = "iWOD"
 
         // Setup interface
-        buttonContinue.backgroundColor = Configuration.Color.ColorD93636
-        buttonContinue.setTitleColor(UIColor.white, for: .normal)
-        buttonContinue.setTitle("NEXT", for: .normal)
         labelDate.text = shareDate()
         labelWod.text = "Loading"
         imageWod.isHidden = true
