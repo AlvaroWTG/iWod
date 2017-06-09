@@ -8,5 +8,7 @@ target 'iWod' do
     # Pods for iWod
     pod 'Kanna'
     pod 'Alamofire'
+    pod 'Fabric'
+    pod 'Crashlytics'
 
 end
