@@ -8,6 +8,8 @@
 
 import UIKit
 import UserNotifications
+import Fabric
+import Crashlytics
 
 struct Configuration {
     struct Color { // Constants for color definitions used in the app
@@ -39,6 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        Fabric.with([Crashlytics.self])
         
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound, .badge]) { (granted, error) in
