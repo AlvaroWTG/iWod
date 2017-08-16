@@ -54,21 +54,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UINavigationBar.appearance().tintColor = UIColor.white
 
         // Handle database
-        var descriptions = UserDefaults.standard.stringArray(forKey: "wodDescriptions") as? NSMutableArray
-        var titles = UserDefaults.standard.stringArray(forKey: "wodTitles") as? NSMutableArray
-        var dates = UserDefaults.standard.stringArray(forKey: "wodDates") as? NSMutableArray
-        if titles == nil {
-            descriptions = NSMutableArray.init(object: "Complete as many rounds in 20 minutes as you can of:\n5 Pull-ups\n10 Push-ups\n15 Squats")
-            dates = NSMutableArray.init(object: self.shareDate())
-            titles = NSMutableArray.init(object: "Cindy")
+        if UserDefaults.standard.stringArray(forKey: "wodTitles") == nil {
+            UserDefaults.standard.set(["Complete as many rounds in 20 minutes as you can of:\n5 Pull-ups\n10 Push-ups\n15 Squats"], forKey: "wodDescriptions")
+            UserDefaults.standard.set(["Cindy"], forKey: "wodTitles")
+            UserDefaults.standard.set([self.shareDate()], forKey: "wodDates")
+            if UserDefaults.standard.synchronize() == true {
+                NSLog("Log: Database initialized...")
+            }
+        } else {
+            NSLog("Log: Database online")
         }
-        UserDefaults.standard.set(descriptions, forKey: "wodDescriptions")
-        UserDefaults.standard.set(titles, forKey: "wodTitles")
-        UserDefaults.standard.set(dates, forKey: "wodDates")
-        if UserDefaults.standard.synchronize() == true {
-            NSLog("Log: Database online...")
-        }
-
         return true
     }
 
