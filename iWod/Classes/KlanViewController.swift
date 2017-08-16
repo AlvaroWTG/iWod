@@ -8,18 +8,15 @@
 
 import UIKit
 
-class KlanViewController: UIViewController, UIWebViewDelegate {
     
     //MARK: Properties
+class KlanViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     /** Property that represents the progressView for the view */
-    @IBOutlet weak var progressView: UIProgressView!
-    /** Property that represents the webView for the view */
-    @IBOutlet weak var webView: UIWebView!
-    /** Property that represents the refresh timer */
-    var timer: Timer!
-    /** Property that represents the boolean whether is finished or not */
-    var isFinished: Bool!
+    @IBOutlet weak var tableView: UITableView!
+    
+    let animals: [String] = ["Horse", "Cow", "Camel", "Sheep", "Goat"]
+    let dates: [String] = ["01/01/2017", "02/02/2017", "03/03/2017", "04/04/2017", "05/05/2017"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
