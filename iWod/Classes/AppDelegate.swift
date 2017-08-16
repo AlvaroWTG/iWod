@@ -54,9 +54,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UINavigationBar.appearance().tintColor = UIColor.white
 
         // Handle database
-        var descriptions = UserDefaults.standard.object(forKey: "wodDescriptions") as? NSMutableArray
-        var titles = UserDefaults.standard.object(forKey: "wodTitles") as? NSMutableArray
-        var dates = UserDefaults.standard.object(forKey: "wodDates") as? NSMutableArray
+        var descriptions = UserDefaults.standard.stringArray(forKey: "wodDescriptions") as? NSMutableArray
+        var titles = UserDefaults.standard.stringArray(forKey: "wodTitles") as? NSMutableArray
+        var dates = UserDefaults.standard.stringArray(forKey: "wodDates") as? NSMutableArray
         if titles == nil {
             descriptions = NSMutableArray.init(object: "Complete as many rounds in 20 minutes as you can of:\n5 Pull-ups\n10 Push-ups\n15 Squats")
             dates = NSMutableArray.init(object: self.shareDate())

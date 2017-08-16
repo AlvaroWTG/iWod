@@ -24,11 +24,11 @@ class EntryViewController: UIViewController, UITextFieldDelegate, UITextViewDele
 
     var row: Int = 0
 
-    var descriptions = UserDefaults.standard.object(forKey: "wodDescriptions") as? NSMutableArray
+    var descriptions = UserDefaults.standard.stringArray(forKey: "wodDescriptions")
 
-    var titles = UserDefaults.standard.object(forKey: "wodTitles") as? NSMutableArray
+    var titles = UserDefaults.standard.stringArray(forKey: "wodTitles")
 
-    var dates = UserDefaults.standard.object(forKey: "wodDates") as? NSMutableArray
+    var dates = UserDefaults.standard.stringArray(forKey: "wodDates")
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +46,7 @@ class EntryViewController: UIViewController, UITextFieldDelegate, UITextViewDele
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(save(_:)))
             navigationItem.title = "New Entry"
         } else { // wod
-            navigationItem.title = self.dates?[self.row] as? String
+            navigationItem.title = self.dates?[self.row]
         }
 
         // Setup interface
@@ -57,8 +57,8 @@ class EntryViewController: UIViewController, UITextFieldDelegate, UITextViewDele
             self.textDescription.text = ""
             self.textField.delegate = self
         } else { // wod
-            self.textDescription.text = self.descriptions?[self.row] as! String
-            self.textField.text = self.titles?[self.row] as? String
+            self.textDescription.text = self.descriptions?[self.row]
+            self.labelDescription.text = self.titles?[self.row]
             self.textDescription.isEditable = false
             self.labelDescription.isHidden = true
             self.labelTitle.isHidden = true

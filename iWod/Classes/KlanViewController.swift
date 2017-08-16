@@ -25,8 +25,9 @@ class KlanViewController: UIViewController, UITableViewDelegate, UITableViewData
     /** Property that represents the progressView for the view */
     @IBOutlet weak var tableView: UITableView!
 
-    var titles: NSMutableArray? = nil
-    var dates: NSMutableArray? = nil
+    var titles = UserDefaults.standard.stringArray(forKey: "wodTitles")
+
+    var dates = UserDefaults.standard.stringArray(forKey: "wodDates")
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,11 +43,7 @@ class KlanViewController: UIViewController, UITableViewDelegate, UITableViewData
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didPress(_:)))
         navigationItem.title = "WODs"
 
-        // Load information
-        self.titles = UserDefaults.standard.object(forKey: "wodTitles") as? NSMutableArray
-        self.dates = UserDefaults.standard.object(forKey: "wodDates") as? NSMutableArray
-
-        // Setup table view
+        // Load information and setup table
         self.tableView.tableFooterView = UIView.init(frame: .zero)
         self.tableView.dataSource = self
         self.tableView.delegate = self
@@ -62,8 +59,8 @@ class KlanViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "KlanViewCell", for: indexPath) as! KlanViewCell
-        cell.labelTitle.text = self.titles?[indexPath.row] as? String
-        cell.labelDate.text = self.dates?[indexPath.row] as? String
+        cell.labelTitle.text = self.titles?[indexPath.row]
+        cell.labelDate.text = self.dates?[indexPath.row]
         cell.labelDate.adjustsFontSizeToFitWidth = true
         return cell
     }
