@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		746476361F4453070004C3AD /* EntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746476351F4453070004C3AD /* EntryViewController.swift */; };
+		74B7DCD71EE17A9D0013E778 /* KlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B7DCD61EE17A9D0013E778 /* KlanViewController.swift */; };
 		74D2991D1E8A741100942AF6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74D2991B1E8A741100942AF6 /* Main.storyboard */; };
 		74D2991F1E8A741100942AF6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74D2991E1E8A741100942AF6 /* Assets.xcassets */; };
 		74D299221E8A741100942AF6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74D299201E8A741100942AF6 /* LaunchScreen.storyboard */; };
@@ -16,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		746476351F4453070004C3AD /* EntryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EntryViewController.swift; path = Classes/EntryViewController.swift; sourceTree = "<group>"; };
+		74B7DCD61EE17A9D0013E778 /* KlanViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = KlanViewController.swift; path = Classes/KlanViewController.swift; sourceTree = "<group>"; };
 		74D299141E8A741100942AF6 /* iWod.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iWod.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		74D2991C1E8A741100942AF6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		74D2991E1E8A741100942AF6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -84,6 +88,8 @@
 			isa = PBXGroup;
 			children = (
 				74D2992C1E8A745600942AF6 /* AppDelegate.swift */,
+				746476351F4453070004C3AD /* EntryViewController.swift */,
+				74B7DCD61EE17A9D0013E778 /* KlanViewController.swift */,
 				74D2992D1E8A745600942AF6 /* ViewController.swift */,
 			);
 			name = Classes;
@@ -120,6 +126,7 @@
 				74CA27C51E8BA40D00DAAE24 /* Script build */,
 				28B4ABDF581C692808879698 /* [CP] Embed Pods Frameworks */,
 				AD060C2CB4F86DC701935ECE /* [CP] Copy Pods Resources */,
+				74026B981EEAE8A000B061C5 /* Fabric */,
 			);
 			buildRules = (
 			);
@@ -207,8 +214,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
+		};
+		74026B981EEAE8A000B061C5 /* Fabric */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Fabric;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" 714368bee1d5a22faec257928a6888fc2446f4bc ebb6058b19d2befe353adedd161c99110dd7f41ff7015ac5dc19a922a7e067e3";
 		};
 		74CA27C51E8BA40D00DAAE24 /* Script build */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -247,6 +268,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				74D2992F1E8A745600942AF6 /* ViewController.swift in Sources */,
+				746476361F4453070004C3AD /* EntryViewController.swift in Sources */,
+				74B7DCD71EE17A9D0013E778 /* KlanViewController.swift in Sources */,
 				74D2992E1E8A745600942AF6 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

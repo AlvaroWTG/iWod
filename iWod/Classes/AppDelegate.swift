@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import UserNotifications
+import Fabric
+import Crashlytics
 
 struct Configuration {
     struct Color { // Constants for color definitions used in the app
@@ -32,16 +35,35 @@ struct Configuration {
 }
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        Fabric.with([Crashlytics.self])
+        
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { (granted, error) in
+            // Enable or disable features based on authorization.
+        }
 
         // Customize the navigation and tab bar appearances
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName : UIColor.white]
+        UITabBar.appearance().tintColor = Configuration.Color.ColorD93636
         UINavigationBar.appearance().tintColor = UIColor.white
+
+        // Handle database
+        if UserDefaults.standard.stringArray(forKey: "wodTitles") == nil {
+            UserDefaults.standard.set(["Complete as many rounds in 20 minutes as you can of:\n5 Pull-ups\n10 Push-ups\n15 Squats"], forKey: "wodDescriptions")
+            UserDefaults.standard.set(["Cindy"], forKey: "wodTitles")
+            UserDefaults.standard.set([self.shareDate()], forKey: "wodDates")
+            if UserDefaults.standard.synchronize() == true {
+                NSLog("Log: Database initialized...")
+            }
+        } else {
+            NSLog("Log: Database online")
+        }
         return true
     }
 
@@ -61,12 +83,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        UIApplication.shared.applicationIconBadgeNumber = 0
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .sound, .badge])
+    }
+
+    //MARK: - Auxiliary method
+
+    func shareDate() -> String {
+        let formatter = DateFormatter.init()
+        formatter.dateFormat = "dd/MM/yyyy"
+        return formatter.string(from: Date.init())
+    }
 
 }
 

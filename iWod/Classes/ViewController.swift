@@ -9,15 +9,13 @@
 import UIKit
 import Alamofire
 import Kanna
+import MessageUI
+import UserNotifications
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
 
     //MARK: Properties
-    
-    /** Property that represents the button for next wod */
-    @IBOutlet weak var buttonContinue: UIButton!
-    /** Property that represents the button for previous wod */
-    @IBOutlet weak var buttonCancel: UIButton!
+
     /** Property that represents the image for the wod icon */
     @IBOutlet weak var imageWod: UIImageView!
     /** Property that represents the date of the wod */
@@ -28,6 +26,8 @@ class ViewController: UIViewController {
     var dictionary:[String: Array<String>] = [:]
     /** Property that represents the index of the wod presented */
     var index = 0
+    /** Property that represents whether the notification is set or not */
+    var isSet = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,13 +46,48 @@ class ViewController: UIViewController {
 
     //MARK: - IBAction implementation methods
 
-    @IBAction func didPressRefresh(_ sender: UIButton) {
-        index -= 1
-        refresh()
+    func didPressRefresh(_ sender: UIButton) {
+        if self.isSet == true {
+            pushAlertView(message: "You have already setup a reminder")
+        } else {
+            let center = UNUserNotificationCenter.current()
+            center.removeAllPendingNotificationRequests()
+            let content = UNMutableNotificationContent()
+            content.title = "It's Crossfit Time"
+            content.body = "Time to book next week 7am class."
+            content.sound = UNNotificationSound.default()
+            content.badge = 1
+
+            var referenceDate = DateComponents()
+            referenceDate.hour = 00
+            referenceDate.minute = 01
+            referenceDate.second = 00
+
+            let trigger = UNCalendarNotificationTrigger(dateMatching: referenceDate, repeats: true)
+            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+            center.add(request) { (NSError) in
+                if let error = NSError {
+                    self.pushAlertView(message: "Error 404 -\(error.localizedDescription)")
+                    self.isSet = false
+                } else {
+                    self.pushAlertView(message: "Notification request succesfully created")
+                    self.isSet = true
+                }
+            }
+        }
     }
 
-    @IBAction func didPressCancel(_ sender: UIButton) {
-        index += 1
+    //MARK: - Gesture recognizer handler method
+
+    func didSwipe(gesture: UISwipeGestureRecognizer) {
+        switch gesture.direction {
+        case UISwipeGestureRecognizerDirection.right:
+            index += 1
+        case UISwipeGestureRecognizerDirection.left:
+            index -= 1
+        default:
+            break
+        }
         refresh()
     }
 
@@ -165,6 +200,22 @@ class ViewController: UIViewController {
     }
 
     /**
+     * Auxiliary function that pushes an alert view
+     * - parameter message: The string value for the message
+     */
+    func pushAlertView(message: String) {
+        let alert = UIAlertController(title: "KLAN", message: message, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+
+    /**
+     * Auxiliary function that pushes the safari view controller
+     */
+    func pushSafariViewController() {
+    }
+
+    /**
      * Auxiliary function that refreshes the interface
      */
     func refresh() {
@@ -173,8 +224,6 @@ class ViewController: UIViewController {
             DispatchQueue.main.async {
                 self.labelDate.text = self.shareDate()
                 self.labelWod.text = parameters[1] as String
-                self.buttonContinue.isEnabled = self.index > 0
-                self.buttonCancel.isEnabled = self.index <= self.dictionary.count
             }
         }
     }
@@ -188,21 +237,24 @@ class ViewController: UIViewController {
         let navigationBar = navigationController?.navigationBar
         navigationBar?.barTintColor = Configuration.Color.ColorD93636
         UIApplication.shared.statusBarStyle = .lightContent
+        navigationBar?.isTranslucent = false
 
         // Setup the navigation item title
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didPressRefresh(_:)))
         navigationItem.title = "iWOD"
 
         // Setup interface
-        buttonContinue.backgroundColor = Configuration.Color.ColorD93636
-        buttonCancel.setTitleColor(Configuration.Color.ColorD93636, for: .normal)
-        buttonContinue.setTitleColor(UIColor.white, for: .normal)
-        buttonCancel.setTitle("PREVIOUS", for: .normal)
-        buttonContinue.setTitle("NEXT", for: .normal)
-        buttonContinue.isEnabled = false
-        buttonCancel.isEnabled = true
         labelDate.text = shareDate()
         labelWod.text = "Loading"
         imageWod.isHidden = true
+
+        // Setup swipe gesture recognizers
+        let swipePrevious = UISwipeGestureRecognizer(target: self, action: #selector(self.didSwipe(gesture:)))
+        let swipeNext = UISwipeGestureRecognizer(target: self, action: #selector(self.didSwipe(gesture:)))
+        swipePrevious.direction = .right
+        swipeNext.direction = .left
+        self.view.addGestureRecognizer(swipePrevious)
+        self.view.addGestureRecognizer(swipeNext)
     }
 
     /**
@@ -231,6 +283,61 @@ class ViewController: UIViewController {
                 self.parse(html: html)
             }
         }
+    }
+
+    //MARK: - PDF creator
+
+    func createPDF() {
+        let html = "<b>Hello <i>Cervi!</i></b> <p>Generated PDF file from HTML in Swift. Primera prueba creando un PDF desde una cadena de texto. A ver como sale</p>"
+        let fmt = UIMarkupTextPrintFormatter(markupText: html)
+
+        // 2. Assign print formatter to UIPrintPageRenderer
+        let render = UIPrintPageRenderer()
+        render.addPrintFormatter(fmt, startingAtPageAt: 0)
+
+        // 3. Assign paperRect and printableRect
+        let page = CGRect(x: 0, y: 0, width: 595.2, height: 841.8) // A4, 72 dpi
+        let printable = page.insetBy(dx: 0, dy: 0)
+        render.setValue(NSValue(cgRect: page), forKey: "paperRect")
+        render.setValue(NSValue(cgRect: printable), forKey: "printableRect")
+
+        // 4. Create PDF context and draw
+        let pdfData = NSMutableData()
+        UIGraphicsBeginPDFContextToData(pdfData, CGRect.zero, nil)
+        for i in 1...render.numberOfPages {
+            UIGraphicsBeginPDFPage();
+            let bounds = UIGraphicsGetPDFContextBounds()
+            render.drawPage(at: i - 1, in: bounds)
+        }
+        UIGraphicsEndPDFContext();
+
+        // 5. Save PDF file
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        pdfData.write(toFile: "\(documentsPath)/file-pdf.pdf", atomically: true)
+    }
+
+    func loadPDF() {
+        createPDF()
+        let mailComposerVC = MFMailComposeViewController()
+        mailComposerVC.mailComposeDelegate = self // Extremely important to set the --mailComposeDelegate-- property, NOT the --delegate-- property
+        mailComposerVC.setToRecipients(["a.gm.herrera@gmail.com", "carloscervera@hcmc.es"])
+        mailComposerVC.setSubject("Enviando email desde app de Watito (prueba)...")
+        mailComposerVC.setMessageBody("Este es el cuerpo de email, que ahora esta vacio!", isHTML: false)
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        let filePath = "\(documentsPath)/file-pdf.pdf"
+        let fileData = NSData(contentsOfFile: filePath)
+        mailComposerVC.addAttachmentData(fileData! as Data, mimeType: "application/pdf", fileName: "file-pdf")
+        if MFMailComposeViewController.canSendMail() {
+            self.present(mailComposerVC, animated: true, completion: nil)
+        } else {
+            print("Mail services are not available")
+            return
+        }
+    }
+
+    // MARK: - MFMailComposeViewControllerDelegate Method
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
     }
 }
 
