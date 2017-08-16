@@ -237,6 +237,7 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
         let navigationBar = navigationController?.navigationBar
         navigationBar?.barTintColor = Configuration.Color.ColorD93636
         UIApplication.shared.statusBarStyle = .lightContent
+        navigationBar?.isTranslucent = false
 
         // Setup the navigation item title
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didPressRefresh(_:)))

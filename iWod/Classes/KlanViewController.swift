@@ -8,34 +8,49 @@
 
 import UIKit
 
+class KlanViewCell: UITableViewCell {
     
     //MARK: Properties
+    /** Property that represents the progressView for the view */
+    @IBOutlet weak var labelTitle: UILabel!
+    /** Property that represents the progressView for the view */
+    @IBOutlet weak var labelDate: UILabel!
+
+}
+
 class KlanViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    //MARK: Properties
+
     /** Property that represents the progressView for the view */
     @IBOutlet weak var tableView: UITableView!
-    
-    let animals: [String] = ["Horse", "Cow", "Camel", "Sheep", "Goat"]
-    let dates: [String] = ["01/01/2017", "02/02/2017", "03/03/2017", "04/04/2017", "05/05/2017"]
+
+    var titles: NSMutableArray? = nil
+    var dates: NSMutableArray? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
+
         // Setup navigation bar
         let navigationBar = navigationController?.navigationBar
         navigationBar?.barTintColor = Configuration.Color.ColorD93636
         UIApplication.shared.statusBarStyle = .lightContent
-        navigationItem.title = "KLAN"
+        navigationBar?.isTranslucent = false
 
-        let url = NSURL (string: "https://browod.com/booking")
-        let requestObj = URLRequest.init(url: url! as URL)
-        progressView.progressTintColor = Configuration.Color.ColorD93636
-        progressView.progress = 0.0
-        if webView.isLoading == false {
-            webView.loadRequest(requestObj)
-            webView.delegate = self
-        }
+        // Setup the navigation item title
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didPress(_:)))
+        navigationItem.title = "WODs"
+
+        // Load information
+        self.titles = UserDefaults.standard.object(forKey: "wodTitles") as? NSMutableArray
+        self.dates = UserDefaults.standard.object(forKey: "wodDates") as? NSMutableArray
+
+        // Setup table view
+        self.tableView.tableFooterView = UIView.init(frame: .zero)
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+        self.tableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,45 +58,39 @@ class KlanViewController: UIViewController, UITableViewDelegate, UITableViewData
         // Dispose of any resources that can be recreated.
     }
 
-    //MARK: - Inherited functions from UIWebview delegate
+    //MARK: - Inherited functions from UITableview data source
 
-    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-        return true
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "KlanViewCell", for: indexPath) as! KlanViewCell
+        cell.labelTitle.text = self.titles?[indexPath.row] as? String
+        cell.labelDate.text = self.dates?[indexPath.row] as? String
+        cell.labelDate.adjustsFontSizeToFitWidth = true
+        return cell
     }
 
-    func webViewDidStartLoad(_ webView: UIWebView) {
-        NSLog("[UIWebView] Log: Loading web view...")
-        isFinished = false
-        timer = Timer.scheduledTimer(timeInterval: 0.01667, target: self, selector: #selector(tick), userInfo: nil, repeats: true)
-    }
-
-    func webViewDidFinishLoad(_ webView: UIWebView) {
-        NSLog("[UIWebView] Log: Web view loading finished...")
-        self.isFinished = true
-    }
-
-    func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
-        NSLog("[UIWebView] Error! Web view loading failed - Error 404 - \(error.localizedDescription)")
-    }
-
-    //MARK: - Auxiliary function
-
-    /**
-     * Auxiliary function that ticks the progress label
-     */
-    func tick() {
-        if isFinished { // invalidate timer and hide the bar
-            if progressView.progress >= 1 {
-                progressView.isHidden = true
-                timer.invalidate()
-            } else {
-                progressView.progress += 0.1
-            }
-        } else { // make progress
-            progressView.progress += 0.05
-            if progressView.progress >= 0.95 {
-                progressView.progress = 0.95
-            }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if self.titles != nil {
+            return self.titles!.count
+        } else {
+            return 0
         }
+    }
+
+    //MARK: - Inherited functions from UITableview delegate
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let controller = self.storyboard?.instantiateViewController(withIdentifier: "EntryViewController") as! EntryViewController
+        controller.newEntry = false
+        controller.row = indexPath.row
+        self.present(UINavigationController.init(rootViewController: controller), animated: true, completion: nil)
+    }
+
+    //MARK: - IBAction implementation methods
+
+    func didPress(_ sender: UIButton) {
+        let controller = self.storyboard?.instantiateViewController(withIdentifier: "EntryViewController") as! EntryViewController
+        controller.newEntry = true
+        self.present(UINavigationController.init(rootViewController: controller), animated: true, completion: nil)
     }
 }
