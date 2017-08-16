@@ -60,9 +60,10 @@ class EntryViewController: UIViewController, UITextFieldDelegate, UITextViewDele
             self.textDescription.text = self.descriptions?[self.row]
             self.labelDescription.text = self.titles?[self.row]
             self.textDescription.isEditable = false
-            self.labelDescription.isHidden = true
             self.labelTitle.isHidden = true
+            self.textField.isHidden = true
         }
+        self.textDescription.isScrollEnabled = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -87,28 +88,17 @@ class EntryViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         let description = self.textDescription.text
         self.textField.resignFirstResponder()
         let title = self.textField.text
-        let date = self.shareDate()
         if (title?.isEmpty)! {
             return
+        } else {
+            self.titles?.append(title ?? "")
         }
         if (description?.isEmpty)! {
             return
-        }
-        if self.titles != nil {
-            self.titles?.add(title ?? "")
         } else {
-            self.titles = NSMutableArray.init(object: title ?? "")
+            self.descriptions?.append(description ?? "")
         }
-        if self.descriptions != nil {
-            self.descriptions?.add(description ?? "")
-        } else {
-            self.descriptions = NSMutableArray.init(object: description ?? "")
-        }
-        if self.dates != nil {
-            self.dates?.add(date)
-        } else {
-            self.dates = NSMutableArray.init(object: date)
-        }
+        self.dates?.append(self.shareDate())
         UserDefaults.standard.set(self.descriptions, forKey: "wodDescriptions")
         UserDefaults.standard.set(self.titles, forKey: "wodTitles")
         UserDefaults.standard.set(self.dates, forKey: "wodDates")
