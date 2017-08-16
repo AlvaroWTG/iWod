@@ -52,6 +52,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName : UIColor.white]
         UITabBar.appearance().tintColor = Configuration.Color.ColorD93636
         UINavigationBar.appearance().tintColor = UIColor.white
+
+        // Handle database
+        var descriptions = UserDefaults.standard.object(forKey: "wodDescriptions") as? NSMutableArray
+        var titles = UserDefaults.standard.object(forKey: "wodTitles") as? NSMutableArray
+        var dates = UserDefaults.standard.object(forKey: "wodDates") as? NSMutableArray
+        if titles == nil {
+            descriptions = NSMutableArray.init(object: "Complete as many rounds in 20 minutes as you can of:\n5 Pull-ups\n10 Push-ups\n15 Squats")
+            dates = NSMutableArray.init(object: self.shareDate())
+            titles = NSMutableArray.init(object: "Cindy")
+        }
+        UserDefaults.standard.set(descriptions, forKey: "wodDescriptions")
+        UserDefaults.standard.set(titles, forKey: "wodTitles")
+        UserDefaults.standard.set(dates, forKey: "wodDates")
+        if UserDefaults.standard.synchronize() == true {
+            NSLog("Log: Database online...")
+        }
+
         return true
     }
 
@@ -80,6 +97,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.alert, .sound, .badge])
+    }
+
+    //MARK: - Auxiliary method
+
+    func shareDate() -> String {
+        let formatter = DateFormatter.init()
+        formatter.dateFormat = "dd/MM/yyyy"
+        return formatter.string(from: Date.init())
     }
 
 }
