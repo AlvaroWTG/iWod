@@ -104,6 +104,7 @@ class EntryViewController: UIViewController, UITextFieldDelegate, UITextViewDele
         UserDefaults.standard.set(self.dates, forKey: "wodDates")
         if UserDefaults.standard.synchronize() == true {
             self.dismiss(animated: true, completion: nil)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "notificationTableWillUpdate"), object: nil)
         }
     }
 

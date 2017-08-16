@@ -44,6 +44,7 @@ class KlanViewController: UIViewController, UITableViewDelegate, UITableViewData
         navigationItem.title = "WODs"
 
         // Load information and setup table
+        NotificationCenter.default.addObserver(self, selector: #selector(tableWillUpdate(_:)), name: NSNotification.Name(rawValue: "notificationTableWillUpdate"), object: nil)
         self.tableView.tableFooterView = UIView.init(frame: .zero)
         self.tableView.dataSource = self
         self.tableView.delegate = self
@@ -89,5 +90,15 @@ class KlanViewController: UIViewController, UITableViewDelegate, UITableViewData
         let controller = self.storyboard?.instantiateViewController(withIdentifier: "EntryViewController") as! EntryViewController
         controller.newEntry = true
         self.present(UINavigationController.init(rootViewController: controller), animated: true, completion: nil)
+    }
+
+    //MARK: - Auxiliary method
+
+    func tableWillUpdate(_ notification: NSNotification) {
+        self.titles = UserDefaults.standard.stringArray(forKey: "wodTitles")
+        self.dates = UserDefaults.standard.stringArray(forKey: "wodDates")
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 }
