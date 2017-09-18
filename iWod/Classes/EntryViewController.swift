@@ -79,11 +79,11 @@ class EntryViewController: UIViewController, UITextFieldDelegate, UITextViewDele
 
     //MARK: - IBAction implementation methods
 
-    func cancel(_ sender: UIButton) {
+    @objc func cancel(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
 
-    func save(_ sender: UIButton) {
+    @objc func save(_ sender: UIButton) {
         self.textDescription.resignFirstResponder()
         let description = self.textDescription.text
         self.textField.resignFirstResponder()

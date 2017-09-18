@@ -49,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
 
         // Customize the navigation and tab bar appearances
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName : UIColor.white]
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
         UITabBar.appearance().tintColor = Configuration.Color.ColorD93636
         UINavigationBar.appearance().tintColor = UIColor.white
 
