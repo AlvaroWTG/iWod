@@ -46,7 +46,7 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
 
     //MARK: - IBAction implementation methods
 
-    @objc func didPressRefresh(_ sender: UIButton) {
+    func didPressRefresh(_ sender: UIButton) {
         if self.isSet == true {
             pushAlertView(message: "You have already setup a reminder")
         } else {
@@ -79,7 +79,7 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
 
     //MARK: - Gesture recognizer handler method
 
-    @objc func didSwipe(gesture: UISwipeGestureRecognizer) {
+    func didSwipe(gesture: UISwipeGestureRecognizer) {
         switch gesture.direction {
         case UISwipeGestureRecognizerDirection.right:
             index += 1

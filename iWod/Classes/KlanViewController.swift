@@ -86,7 +86,7 @@ class KlanViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     //MARK: - IBAction implementation methods
 
-    @objc func didPress(_ sender: UIButton) {
+    func didPress(_ sender: UIButton) {
         let controller = self.storyboard?.instantiateViewController(withIdentifier: "EntryViewController") as! EntryViewController
         controller.newEntry = true
         self.present(UINavigationController.init(rootViewController: controller), animated: true, completion: nil)
@@ -94,7 +94,7 @@ class KlanViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     //MARK: - Auxiliary method
 
-    @objc func tableWillUpdate(_ notification: NSNotification) {
+    func tableWillUpdate(_ notification: NSNotification) {
         self.titles = UserDefaults.standard.stringArray(forKey: "wodTitles")
         self.dates = UserDefaults.standard.stringArray(forKey: "wodDates")
         DispatchQueue.main.async {

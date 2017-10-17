@@ -1,8 +1,8 @@
 PODS:
   - Alamofire (4.5.1)
-  - Crashlytics (3.8.6):
-    - Fabric (~> 1.6.3)
-  - Fabric (1.6.13)
+  - Crashlytics (3.9.0):
+    - Fabric (~> 1.7.0)
+  - Fabric (1.7.0)
   - Kanna (2.2.1)
 
 DEPENDENCIES:
@@ -13,8 +13,8 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
-  Crashlytics: 95d05f4e4c19a771250c4bd9ce344d996de32bbf
-  Fabric: 2fb5676bc811af011a04513451f463dac6803206
+  Crashlytics: 64aad5dd97249dd3ff94b979fea140144590cdd3
+  Fabric: e6be012366472553807dada21243c5ab8d904151
   Kanna: 182789ab065e8f9a6ccc2a74ce6283d3401c0c4a
 
 PODFILE CHECKSUM: 1d68e31dbced3b2c6d8ebd6723f926e547f92b83
