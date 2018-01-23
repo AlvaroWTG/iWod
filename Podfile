@@ -6,9 +6,9 @@ target 'iWod' do
     use_frameworks!
 
     # Pods for iWod
-    pod 'Kanna'
     pod 'Alamofire'
     pod 'Fabric'
     pod 'Crashlytics'
+    pod 'Kanna'
 
 end
